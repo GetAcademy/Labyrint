@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css" />
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script>
+
+        var mazeModel = {
+            size: 2,
+            rows: [
+                [
+                    { isHigh: false, isWide: false, isOpen: false },
+                    { isHigh: false, isWide: true, isOpen: false },
+                    { isHigh: false, isWide: false, isOpen: false },
+                    { isHigh: false, isWide: true, isOpen: false },
+                    { isHigh: false, isWide: false, isOpen: false },
+                ],
+                [
+                    { isHigh: true, isWide: false, isOpen: false },
+                    { isHigh: true, isWide: true },
+                    { isHigh: true, isWide: false, isOpen: false },
+                    { isHigh: true, isWide: true },
+                    { isHigh: true, isWide: false, isOpen: false },
+                ],
+                [
+                    { isHigh: false, isWide: false, isOpen: false },
+                    { isHigh: false, isWide: true, isOpen: false },
+                    { isHigh: false, isWide: false, isOpen: false },
+                    { isHigh: false, isWide: true, isOpen: false },
+                    { isHigh: false, isWide: false, isOpen: false },
+                ],
+                [
+                    { isHigh: true, isWide: false, isOpen: false },
+                    { isHigh: true, isWide: true},
+                    { isHigh: true, isWide: false, isOpen: false },
+                    { isHigh: true, isWide: true },
+                    { isHigh: true, isWide: false, isOpen: false },
+                ],
+                [
+                    { isHigh: false, isWide: false, isOpen: false },
+                    { isHigh: false, isWide: true, isOpen: false },
+                    { isHigh: false, isWide: false, isOpen: false },
+                    { isHigh: false, isWide: true, isOpen: false },
+                    { isHigh: false, isWide: false, isOpen: false },
+                ],
+            ]
+        };
+
+        updateView();
+        function updateView() {
+            document.getElementById('app').innerHTML = `
+                <table>
+                    ${mazeModel.rows.map(row => `
+                    <tr>
+                        ${row.map(square => `
+                        <td class="${getCssClass(square)}">
+                        </td>
+                        `).join('')}
+                    </tr>    
+                    `).join('')}
+                </table>
+            `;
+        }
+
+        function getCssClass(square) {
+            if (square.isHigh && square.isWide) return 'room';
+            const highLow = square.isHigh ? 'high ' : 'low ';
+            const wideSmall = square.isWide ? 'wide ' : 'small ';
+            const wall = square.isOpen ? 'noWall ' : 'wall ';
+            return highLow + wideSmall + wall;
+        }
+
+    </script>
+</body>
+
+</html>
