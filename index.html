@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    <input type="range" min="1" max="20" step="1" oninput="initModel(this.value); updateView();" />
     <div id="app"></div>
     <script>
 
@@ -38,7 +39,7 @@
                 ],
                 [
                     { isHigh: true, isWide: false, isOpen: false },
-                    { isHigh: true, isWide: true},
+                    { isHigh: true, isWide: true },
                     { isHigh: true, isWide: false, isOpen: false },
                     { isHigh: true, isWide: true },
                     { isHigh: true, isWide: false, isOpen: false },
@@ -77,6 +78,48 @@
             return highLow + wideSmall + wall;
         }
 
+        function initModel(size) {
+            mazeModel.rows = [];
+            for (let rowIndex = 0; rowIndex < size; rowIndex++) {
+                mazeModel.rows.push(createRow(size, false));
+                mazeModel.rows.push(createRow(size, true));
+            }
+            mazeModel.rows.push(createRow(size, false));
+
+            closeRow(0);
+            closeRow(mazeModel.rows.length-1);
+            closeColumn(0);
+            closeColumn(mazeModel.rows.length-1);
+        }
+
+        function closeRow(index){
+            const row = mazeModel.rows[index];
+            for(let cell of row){
+                cell.isOpen = false;
+            }
+        }
+
+        function closeColumn(index){
+            for(let row of mazeModel.rows){
+                row[index].isOpen = false;
+            }
+        }
+
+        function createRow(size, isHigh) {
+            const row = [];
+            for (let colIndex = 0; colIndex < size; colIndex++) {
+                row.push(createCell(isHigh, false));
+                row.push(createCell(isHigh, true));
+            }
+            row.push(createCell(isHigh, false));
+            return row;
+        }
+
+        function createCell(isHigh, isWide) {
+            if (isHigh && isWide) return { isHigh: true, isWide: true };
+            const isOpen = Math.random() < 0.5;
+            return {isHigh, isWide, isOpen};
+        }
     </script>
 </body>
 
