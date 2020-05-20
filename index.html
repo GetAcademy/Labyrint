@@ -58,10 +58,10 @@
         function updateView() {
             document.getElementById('app').innerHTML = `
                 <table>
-                    ${mazeModel.rows.map(row => `
+                    ${mazeModel.rows.map((row, rowIndex) => `
                     <tr>
-                        ${row.map(square => `
-                        <td class="${getCssClass(square)}">
+                        ${row.map((col, colIndex) => `
+                        <td onclick="toggle(${rowIndex}, ${colIndex})" class="${getCssClass(col)}">
                         </td>
                         `).join('')}
                     </tr>    
@@ -87,20 +87,20 @@
             mazeModel.rows.push(createRow(size, false));
 
             closeRow(0);
-            closeRow(mazeModel.rows.length-1);
+            closeRow(mazeModel.rows.length - 1);
             closeColumn(0);
-            closeColumn(mazeModel.rows.length-1);
+            closeColumn(mazeModel.rows.length - 1);
         }
 
-        function closeRow(index){
+        function closeRow(index) {
             const row = mazeModel.rows[index];
-            for(let cell of row){
+            for (let cell of row) {
                 cell.isOpen = false;
             }
         }
 
-        function closeColumn(index){
-            for(let row of mazeModel.rows){
+        function closeColumn(index) {
+            for (let row of mazeModel.rows) {
                 row[index].isOpen = false;
             }
         }
@@ -116,9 +116,16 @@
         }
 
         function createCell(isHigh, isWide) {
-            if (isHigh && isWide) return { isHigh: true, isWide: true };
+            if (isHigh === isWide) return { isHigh, isWide };
             const isOpen = Math.random() < 0.5;
-            return {isHigh, isWide, isOpen};
+            return { isHigh, isWide, isOpen };
+        }
+
+        function toggle(rowIndex, colIndex) {
+            const cell = mazeModel.rows[rowIndex][colIndex];
+            if (cell.isOpen === undefined) return;
+            cell.isOpen = !cell.isOpen;
+            updateView();
         }
     </script>
 </body>
